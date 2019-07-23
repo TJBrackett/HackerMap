@@ -13,7 +13,7 @@ app.use((req, res) =>{
 })
 
 app.post('/logs', (req, res) => {
-    let testPost = req.body
+    let testPost = JSON.parse(req.body)
     console.log(testPost.test)
 })
 
