@@ -7,8 +7,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 app.use((req, res) =>{
+    let test = JSON.parse(req.body)
     res.setHeader('Content-Type', 'application/json')
-    console.log('Posted:\n' + JSON.stringify(req.body))
+    console.log('Posted:\n' + test.test)
 })
 
 app.post('/logs', (req, res) => {
