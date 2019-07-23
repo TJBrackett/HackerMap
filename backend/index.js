@@ -12,9 +12,8 @@ app.use(bodyParser.json());
 // })
 
 app.post('/logs', (req, res) => {
-    let testPost = JSON.parse(req.body)
-    console.log(testPost.test)
-    res.send(testPost.test)
+    let testPost = JSON.stringify(req.body)
+    console.log(testPost)
 })
 
 app.listen(8080)
