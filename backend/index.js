@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const reqDate = new Date();
+const reqDate = new Date.now();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
