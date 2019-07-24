@@ -7,8 +7,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 app.post('/logs', (req, res) => {
-    let testPost = JSON.stringify(req.body)
-    console.log(testPost)
+    console.log(req.body)
 })
 
 app.listen(8080)
