@@ -9,11 +9,11 @@ app.use(bodyParser.json());
 app.route('/logs')
     .all((req, res, next) => {
         res.setHeader('Content-Type', 'application/json')
-        console.log('Posted:\n' + JSON.stringify(req.body))
-        res.end(JSON.stringify(req.body))
+        testPost = JSON.stringify(req.body)
+        console.log('Posted:\n' + testPost)
     }).post((req, res, next) =>{
-        testPost = JSON.parse(req.body)
         console.log("POST: " + testPost)
+        res.end(testPost)
     })
 
 app.listen(8080)
