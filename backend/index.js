@@ -7,12 +7,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 app.route('/logs')
-    .all((req, res, next) => {
+    .post((req, res, next) => {
         res.setHeader('Content-Type', 'application/json')
         testPost = JSON.stringify(req.body)
         console.log('Posted:\n' + testPost)
-    }).post((req, res, next) =>{
-        console.log("POST: " + testPost)
         res.end(testPost)
     })
 
