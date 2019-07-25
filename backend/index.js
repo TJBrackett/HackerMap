@@ -25,18 +25,23 @@ app.post('/logs', (req, res, next) => {
         reqUrl: req.body.reqUrl
     }
 //URL for ip geolocation lookup (Switching to Google Maps) 
-    const geoApi = "http://api.ipstack.com/" + postInfo.ipAddr + "?access_key=cb18c83bb4439722743b882ff7ac329d&format=1"
+    const geoApi = "http://api.ipstack.com/" + postInfo.ipAddr + "?access_key=" + process.env.GEO_IP_ACCESS_KEY + "&format=1"
 //Calls the geolocation API
     request(geoApi, { json: true }, (err, res, body) => {
-        if (err) { return console.log(err); }
-        console.log(body.latitude)
-        console.log(body.longitude);
-        console.log(body.city);
-        console.log(body.region_name);
-        console.log(body.country_name);
+        if (err) { 
+            return console.log(err); 
+        }
+        let locationInfo = {
+            lat: body.latitude,
+            long: body.longitude,
+            city: body.city,
+            region: body.region_name,
+            country: body.country_name
+        }
+        console.log(postInfo.ipAddr)
     });
 //Closes connection and sends final message.
     res.end(postInfo.ipAddr)
 })
 
-app.listen(8080)
+app.listen(process.env.PORT)
