@@ -36,9 +36,10 @@ app.post('/logs', (req, res, next) => {
             long: body.longitude,
             city: body.city,
             region: body.region_name,
-            country: body.country_name
+            country: body.country_name,
+            flag: body.location.country_flag_emoji_unicode
         }
-        console.log(postInfo.ipAddr)
+        console.log(locationInfo.flag)
     });
 //Closes connection and sends final message.
     res.end(postInfo.ipAddr)
