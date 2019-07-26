@@ -1,53 +1,53 @@
-// dependencies 
-
-
+'use strict'
 const gulp = require('gulp')
 const sass = require('gulp-sass')
-const minifyCSS = require('gulp-clean-css')
-const uglify = require('gulp-uglify')
-const rename = require('gulp-rename')
-const changed = require('gulp-changed')
-const imagemin = require('gulp-imagemin')
+sass.compiler = require('node-sass')
+const uglifycss = require('gulp-uglifycss')
+// const imagemin = require('gulp-imagemin')
+// const less = require('gulp-less')
+// const babel = require('gulp-babel')
+// const concat = require('gulp-concat')
+// const rename = require('gulp-rename')
+// const cleanCSS = require('gulp-clean-css')
+// sass convert to css
 
 
-// file dest
 
-
-const SCSS = './scss/**/*.scss'
-const SCSS_DEST = './css/**/*.css'
-
-
-// compile SCSS
-
-
-gulp.task('compile_scss', () => {
-
-    gulp.src(SCSS)
+gulp.task('sass', () => {
+    return gulp.src('./scss/*.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(minifyCSS())
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(changed(SCSS_DEST))
-        .pipe(gulp.dest(SCSS_DEST))
-
+        .pipe(gulp.dest('./css'));
 })
 
-// minify images
+// minified css
 
-gulp.task('imageMin', () =>
-    gulp.src('./images/*')
-        .pipe(imagemin())
-        .pipe(gulp.dest('dist/images'))
-);
-
-
-// detect changes in SCSS
-
-
-gulp.task('watch_sass', () => {
-    gulp.watch(SCSS, [compile_scss])
+gulp.task('css', () => {
+    return gulp.src('./css/*.css')
+        .pipe(uglifycss({
+            "maxLineLen": 80,
+            "uglyComments": true
+        }))
+        .pipe(gulp.dest('./dist/'));
 })
 
 
-// run task
+gulp.task('run',['sass', 'css'])
 
-gulp.task('default', ['watch_scss'])
+
+gulp.task('watch'() => {
+    gulp.watch('./scss/*.sass', ['sass'])
+    gulp.watch('./css/*.css', ['css'])
+})
+
+
+gulp.task('default', ['run', 'watch'])
+
+
+
+// this is for minified images
+
+// gulp.task('imageMin', () =>
+//     gulp.src('src/images/*')
+//         .pipe(imagemin())
+//         .pipe(gulp.dest('./images'))
+// )
