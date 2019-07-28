@@ -1,11 +1,17 @@
-var express = require('express')
-var app = module.exports = express()
+const express = require('express')
 const request = require('request')
 const db = require('../database/dbCon.js')
 
-const reqDate = new Date();
+const app = module.exports = express()
 
+//TODO - Make entire structure promise based.
+//       Make queries for ip/geo/site check for duplicates and then modify visit
 app.post('/logs', (req, res, next) => {
+    const date = new Date()
+    const reqDate = date.toLocaleDateString();
+    const reqTime = date.toLocaleTimeString('en-us', {hour12: false});
+    console.log(reqDate)
+    console.log(reqTime)
     //Save incoming info into a JSON object
     let postInfo = {
         ipAddr: req.body.ipAddr,
@@ -13,7 +19,8 @@ app.post('/logs', (req, res, next) => {
         reqItem: req.body.reqItem,
         reqStatus: req.body.reqStatus,
         reqUrl: req.body.reqUrl,
-        date: reqDate
+        date: reqDate,
+        time: reqTime
     }
 
     db.query('insert into site (siteURL, siteStatus, siteReqType, siteReqItem, siteCounter) values(?,?,?,?,?)',
@@ -39,20 +46,25 @@ app.post('/logs', (req, res, next) => {
                 country: body.country_name,
                 flag: body.location.country_flag_emoji_unicode
             }
+
+            //Checks if city entry already exists to prevent duplicates
             db.query('select * from geo where geoCity=?',[locationInfo.city], (err, results) => {
                 if (err) {
                     throw err
-                } else if (results > 0) {
-                    console.log(results)
-                } 
-        
+                } else if (results === undefined || results.length == 0) {
+                    db.query('insert into geo (geoLat, geoLong, geoCity, geoRegion, geoCountry, geoFlag) values (?,?,?,?,?,?)',
+                            [locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag], 
+                            (err, results) => {
+                        if (err) {
+                            throw err
+                        } else {
+                            console.log("insert " + results[0])
+                        }
+                    })
+                } else {
+                    console.log("else " + results[0].PK_geo)
+                }
             })
-            db.query('insert into geo (geoLat, geoLong, geoCity, geoRegion, geoCountry, geoFlag) values (?,?,?,?,?,?)',
-                [locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag], (err) => {
-                    if (err) {
-                        throw err
-                    }
-                })
         }
     })
     res.end("That's all folks!")
