@@ -1,11 +1,9 @@
 const express = require('express')
 const request = require('request')
-const promise = require('promise')
-const util = require('util')
 const db = require('../database/dbCon.js')
-const queryGeo =promise.denodeify(require('../database/queryGeo.js'))
-const queryIp =promise.denodeify(require('../database/queryIp.js'))
-const querySite = promise.denodeify(require('../database/querySite.js'))
+const queryGeo = require('../database/queryGeo.js')
+const queryIp = require('../database/queryIp.js')
+const querySite = require('../database/querySite.js')
 
 const app = module.exports = express()
 
@@ -15,8 +13,6 @@ app.post('/logs', (req, res, next) => {
     const date = new Date()
     const reqDate = date.toLocaleDateString();
     const reqTime = date.toLocaleTimeString('en-us', {hour12: false});
-
-    console.log(reqTime)
     //Save incoming info into a JSON object
     const postInfo = {
         ipAddr: req.body.ipAddr,
@@ -27,6 +23,9 @@ app.post('/logs', (req, res, next) => {
         date: reqDate,
         time: reqTime
     }
+    //URL for ip geolocation lookup (Switching to Google Maps) 
+    const geoApi = "http://api.ipstack.com/" + postInfo.ipAddr + "?access_key=" + process.env.GEO_IP + "&format=1"
+
     //Add FK_IP 
     // db.query('insert into site (siteURL, siteStatus, siteReqType, siteReqItem, siteCounter) values(?,?,?,?,?)',
     //     [postInfo.reqUrl, postInfo.reqStatus, postInfo.reqType, postInfo.reqItem, 1], (err) => {
@@ -34,12 +33,9 @@ app.post('/logs', (req, res, next) => {
     //             throw err
     //         }
     //     })
-
-    //URL for ip geolocation lookup (Switching to Google Maps) 
-    const geoApi = "http://api.ipstack.com/" + postInfo.ipAddr + "?access_key=" + process.env.GEO_IP + "&format=1"
-
+  
     //Calls the geolocation API
-    request(geoApi, { json: true }, (err, res, body) => {
+    request(geoApi, { json: true }, async (err, res, body) => {
         if (err) {
             throw err
         } else {
@@ -52,12 +48,13 @@ app.post('/logs', (req, res, next) => {
                 flag: body.location.country_flag_emoji_unicode
             }
             //Checks if city entry already exists to prevent duplicates
-            const pk_geo = queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag)
-            //queryIp(pk_geo, postInfo.ipAddr)
-            console.log(pk_geo)
+            Promise.resolve(queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag))
+            .then((pk) => {
+                Promise.resolve(queryIp(pk, postInfo.ipAddr))})
+            .catch(err => console.log(err))
+            
         }
     })
-
 
     res.end("That's all folks!")
 })
