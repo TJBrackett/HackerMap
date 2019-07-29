@@ -8,8 +8,6 @@ const queryVisits = require('../database/queryVisits.js')
 
 const app = module.exports = express()
 
-//TODO - Make entire structure promise based.
-//       Make queries for ip/geo/site check for duplicates and then modify visit
 app.post('/logs', (req, res, next) => {
     const date = new Date()
     const reqDate = date.toLocaleDateString();
@@ -52,12 +50,12 @@ app.post('/logs', (req, res, next) => {
             //     Promise.resolve(queryIp(pk_geo, postInfo.ipAddr))})
             // .catch(err => console.log(err))
             
-            const pk_geo = await Promise.resolve(queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag))
-            const pk_ip = await Promise.resolve(queryIp(pk_geo, postInfo.ipAddr))
-            //const pk_site = await Promise.resolve(querySite(pk_ip, postInfo.reqStatus, postInfo.reqUrl, postInfo.reqType, postInfo.reqItem))
-            //const pk_date = await Promise.resolve(queryVisits(fk_geo, fk_ip, fk_site, reqDate, reqTime))
+            const pk_geo = await queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag)
+            const pk_ip = await queryIp(pk_geo, postInfo.ipAddr)
+            const pk_site = await querySite(postInfo.reqUrl)
+            //const pk_date = await queryVisits(fk_geo, fk_ip, fk_site, reqDate, reqTime)
         }
     })
 
-    res.end("That's all folks!")
+    res.end("That's all folks! Que Loonie Toons music?")
 })

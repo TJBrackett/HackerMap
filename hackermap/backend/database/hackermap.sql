@@ -89,12 +89,8 @@ DROP TABLE IF EXISTS `hackermap`.`site` ;
 
 CREATE TABLE IF NOT EXISTS `hackermap`.`site` (
   `PK_site` INT NOT NULL AUTO_INCREMENT,
-  `FK_ip` INT NOT NULL,
-  `siteStatus` VARCHAR(10) NOT NULL,
   `siteCounter` INT NOT NULL,
-  `siteURL` VARCHAR(35) NOT NULL,
-  `siteReqType` VARCHAR(10) NOT NULL,
-  `siteReqItem` VARCHAR(100) NOT NULL,
+  `siteURL` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`PK_site`),
   CONSTRAINT `FK_ip`
     FOREIGN KEY (`PK_site`)
@@ -149,6 +145,36 @@ CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC) VISIBLE;
 CREATE INDEX `FK_site_idx` ON `hackermap`.`visits` (`FK_site` ASC) VISIBLE;
 
 CREATE INDEX `FK_login_idx` ON `hackermap`.`visits` (`FK_login` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `hackermap`.`requests`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hackermap`.`requests` ;
+
+CREATE TABLE IF NOT EXISTS `hackermap`.`requests` (
+  `PK_req` INT NOT NULL,
+  `FK_sites` INT NOT NULL,
+  `FK_ip` INT NOT NULL,
+  `reqStatus` VARCHAR(10) NOT NULL,
+  `reqItem` VARCHAR(100) NOT NULL,
+  `reqType` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`PK_req`),
+    FOREIGN KEY (`FK_ip`)
+    REFERENCES `hackermap`.`ip` (`PK_ip`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (`FK_sites`)
+    REFERENCES `hackermap`.`site` (`PK_site`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE UNIQUE INDEX `PK_req_UNIQUE` ON `hackermap`.`requests` (`PK_req` ASC) VISIBLE;
+
+CREATE INDEX `FK_ip_idx` ON `hackermap`.`requests` (`FK_ip` ASC) VISIBLE;
+
+CREATE INDEX `FK_sites_idx` ON `hackermap`.`requests` (`FK_sites` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
