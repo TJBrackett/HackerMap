@@ -2,12 +2,14 @@ const db = require('./dbCon.js')
 
 module.exports = querySite = (siteUrl) => {
     return new Promise((resolve, reject) => {
+        //Checks for duplicate entry
         db.query('select * from site where siteURL=?',
             [siteUrl], (err, results) => {
             if (err) {
                 reject(err)
-            }
-            else if (results === undefined || results.length == 0) {
+
+            //If no duplicate is found, insert
+            } else if (results === undefined || results.length == 0) {
                 db.query('insert into site(siteURL, siteCounter) values(?,?)', 
                     [siteUrl, 1], (err, result) => {
                     if (err) {
@@ -17,6 +19,7 @@ module.exports = querySite = (siteUrl) => {
                         resolve(result.insertId)
                     }
                 })
+            //If duplicate found, increment visit counter
             } else {
                 const counter = results[0].siteCounter
                 const pk_site = results[0].PK_site

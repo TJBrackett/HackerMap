@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const util = require('util')
 
+//Create pool of connections
 const dbCon = mysql.createPool({
     connectionLimit: 100,
     host: process.env.DB_HOST,
@@ -10,6 +11,7 @@ const dbCon = mysql.createPool({
     database: "hackermap"
 })
 
+//Error handling
 dbCon.getConnection((err, connection) => {
     if (err) {
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -27,6 +29,7 @@ dbCon.getConnection((err, connection) => {
     return
 })
 
+//Allow .query to function with promises
 dbCon.query = util.promisify(dbCon.query)
 
 module.exports = dbCon
