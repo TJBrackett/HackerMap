@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`visits` (
   `FK_ip` INT NULL,
   `FK_site` INT NULL,
   `FK_login` INT NULL,
-  `date` DATE NOT NULL,
+  `date` varchar(10) NOT NULL,
   `time` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`PK_date`),
     FOREIGN KEY (`FK_ip`)

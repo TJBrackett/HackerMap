@@ -40,17 +40,16 @@ app.post('/logs', (req, res, next) => {
             const pk_geo = await queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag)
             const pk_ip = await queryIp(pk_geo, postInfo.ipAddr)
             const pk_site = await querySite(postInfo.reqUrl)
-            //Err: ER_BAD_FIELD_ERROR: Unknown column 'FK_geo' in 'field list'
-            //const pk_visits = await queryVisits(pk_geo, pk_ip, pk_site, reqDate, reqTime)
+            const pk_visits = await queryVisits(pk_geo, pk_ip, pk_site, reqDate, reqTime)
             const pk_req = await queryReq(pk_site, pk_ip, postInfo.reqStatus, postInfo.reqItem, postInfo.reqType)
 
-            const sendData = await request({
-                url: "http://localhost:3000",
-                method: "POST",
-                body: {hello: "world"},
-                json: true
-            })
-            console.log(sendData)
+            // const sendData = await request({
+            //     url: "http://localhost:3000",
+            //     method: "POST",
+            //     body: {hello: "world"},
+            //     json: true
+            // })
+            // console.log(sendData)
         }
     })
 
