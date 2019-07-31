@@ -4,7 +4,9 @@ import './dist/index.css';
 function App() {
   return (
     <div className="test">
-      <div className="circle"></div>
+      <div className="circle">
+        <p></p>
+      </div>
     </div>
   );
 }

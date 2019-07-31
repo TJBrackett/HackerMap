@@ -12,4 +12,4 @@ app.use(bodyParser.json())
 app.use(logs)
 app.use(login)
 
-app.listen(process.env.PORT)
+app.listen(process.env.PORT || 8080)

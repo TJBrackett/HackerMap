@@ -1,9 +1,8 @@
 const express = require('express')
 const request = require('request')
-const db = require('../database/dbCon.js')
+const queryIp = require('../database/queryIp.js')
 const queryGeo = require('../database/queryGeo.js')
 const queryReq = require('../database/queryReq.js')
-const queryIp = require('../database/queryIp.js')
 const querySite = require('../database/querySite.js')
 const queryVisits = require('../database/queryVisits.js')
 
@@ -53,5 +52,5 @@ app.post('/logs', (req, res, next) => {
         }
     })
 
-    res.end("That's all folks! Que Loonie Toons music?")
+    res.end("That's all folks! Queue Loonie Toons music?")
 })
