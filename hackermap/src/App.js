@@ -4,7 +4,7 @@ import './dist/index.css';
 function App() {
   return (
     <div className="test" id="map">
-
+      
     </div>
   );
 }
