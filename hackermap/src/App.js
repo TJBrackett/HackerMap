@@ -3,10 +3,8 @@ import './dist/index.css';
 
 function App() {
   return (
-    <div className="test">
-      <div className="circle">
-        <p></p>
-      </div>
+    <div className="test" id="map">
+
     </div>
   );
 }

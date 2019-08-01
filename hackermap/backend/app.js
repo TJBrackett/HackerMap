@@ -12,4 +12,4 @@ app.use(bodyParser.json())
 app.use(logs)
 app.use(login)
 
-app.listen(process.env.PORT || 8080)
+app.listen(process.env.PORT, () => console.log("Sever started on port " + process.env.PORT))

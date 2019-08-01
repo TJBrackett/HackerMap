@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `hackermap`.`login` ;
 CREATE TABLE IF NOT EXISTS `hackermap`.`login` (
   `PK_login` INT NOT NULL AUTO_INCREMENT,
   `user` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`PK_login`))
 ENGINE = InnoDB;
 
