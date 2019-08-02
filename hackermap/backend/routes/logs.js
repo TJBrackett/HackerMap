@@ -19,6 +19,7 @@ app.post('/logs', (req, res, next) => {
         reqStatus: req.body.reqStatus,
         reqUrl: req.body.reqUrl
     }
+    console.log(postInfo)
     //URL for ip geolocation lookup (Switching to Google Maps) 
     const geoApi = "http://api.ipstack.com/" + postInfo.ipAddr + "?access_key=" + process.env.GEO_IP + "&format=1"
   
