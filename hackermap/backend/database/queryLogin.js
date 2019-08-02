@@ -1,9 +1,9 @@
 const db = require('./dbCon.js')
 
-module.exports = queryVisits = (geo, ip, site, date, time) => {
+module.exports = queryVisits = (login, date, time) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into visits (FK_geo, FK_ip, FK_site, date, time) values (?,?,?,?,?)',
-        [geo, ip, site, date, time],
+        db.query('insert into visits (FK_login, date, time) values (?,?,?)',
+        [login, date, time],
         (err, results) => {
             if (err) {
                 reject(err)

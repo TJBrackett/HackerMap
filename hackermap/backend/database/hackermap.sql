@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `hackermap`.`login` ;
 CREATE TABLE IF NOT EXISTS `hackermap`.`login` (
   `PK_login` INT NOT NULL AUTO_INCREMENT,
   `user` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(200) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`PK_login`))
 ENGINE = InnoDB;
 
@@ -91,12 +91,7 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`site` (
   `PK_site` INT NOT NULL AUTO_INCREMENT,
   `siteCounter` INT NOT NULL,
   `siteURL` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`PK_site`),
-  CONSTRAINT `FK_ip`
-    FOREIGN KEY (`PK_site`)
-    REFERENCES `hackermap`.`ip` (`PK_ip`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`PK_site`))
 ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `PK_site_UNIQUE` ON `hackermap`.`site` (`PK_site` ASC) VISIBLE;
@@ -113,15 +108,15 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`visits` (
   `FK_ip` INT NULL,
   `FK_site` INT NULL,
   `FK_login` INT NULL,
-  `date` varchar(10) NOT NULL,
+  `date` VARCHAR(10) NOT NULL,
   `time` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`PK_date`),
-    FOREIGN KEY (`FK_ip`)
-    REFERENCES `hackermap`.`ip` (`PK_ip`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
     FOREIGN KEY (`FK_geo`)
     REFERENCES `hackermap`.`geo` (`PK_geo`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (`FK_ip`)
+    REFERENCES `hackermap`.`ip` (`PK_ip`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `FK_site`
@@ -138,13 +133,13 @@ ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `PK_date_UNIQUE` ON `hackermap`.`visits` (`PK_date` ASC) VISIBLE;
 
-CREATE INDEX `FK_ip_idx` ON `hackermap`.`visits` (`FK_ip` ASC) VISIBLE;
-
-CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC) VISIBLE;
-
 CREATE INDEX `FK_site_idx` ON `hackermap`.`visits` (`FK_site` ASC) VISIBLE;
 
 CREATE INDEX `FK_login_idx` ON `hackermap`.`visits` (`FK_login` ASC) VISIBLE;
+
+CREATE INDEX `FK_ip_idx` ON `hackermap`.`visits` (`FK_ip` ASC) VISIBLE;
+
+CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -153,13 +148,14 @@ CREATE INDEX `FK_login_idx` ON `hackermap`.`visits` (`FK_login` ASC) VISIBLE;
 DROP TABLE IF EXISTS `hackermap`.`requests` ;
 
 CREATE TABLE IF NOT EXISTS `hackermap`.`requests` (
-  `PK_req` INT NOT NULL AUTO_INCREMENT,
+  `PK_req` INT NOT NULL,
   `FK_sites` INT NOT NULL,
   `FK_ip` INT NOT NULL,
   `reqStatus` VARCHAR(10) NOT NULL,
   `reqItem` VARCHAR(100) NOT NULL,
   `reqType` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`PK_req`),
+  CONSTRAINT `FK_ip`
     FOREIGN KEY (`FK_ip`)
     REFERENCES `hackermap`.`ip` (`PK_ip`)
     ON DELETE NO ACTION
