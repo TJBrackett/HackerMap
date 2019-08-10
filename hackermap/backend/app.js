@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const logs = require('./routes/logs')
 const login = require('./routes/login')
+const http = require('http')
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -12,5 +13,7 @@ app.use(bodyParser.json())
 app.use(logs)
 app.use(login)
 
-app.listen(process.env.PORT, 
-    () => console.log("Sever started on port " + process.env.PORT))
+
+http.createServer(app).listen(process.env.PORT, () => {
+    console.log(`Http server started on port ${process.env.PORT}`);
+});
