@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`login` (
   PRIMARY KEY (`PK_login`))
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `user_UNIQUE` ON `hackermap`.`login` (`user` ASC) VISIBLE;
+CREATE UNIQUE INDEX `user_UNIQUE` ON `hackermap`.`login` (`user` ASC);
 
-CREATE UNIQUE INDEX `PK_login_UNIQUE` ON `hackermap`.`login` (`PK_login` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_login_UNIQUE` ON `hackermap`.`login` (`PK_login` ASC);
 
 
 -- -----------------------------------------------------
@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`geo` (
   PRIMARY KEY (`PK_geo`))
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `PK_geo_UNIQUE` ON `hackermap`.`geo` (`PK_geo` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_geo_UNIQUE` ON `hackermap`.`geo` (`PK_geo` ASC);
 
-CREATE UNIQUE INDEX `geoLat_UNIQUE` ON `hackermap`.`geo` (`geoLat` ASC) VISIBLE;
+CREATE UNIQUE INDEX `geoLat_UNIQUE` ON `hackermap`.`geo` (`geoLat` ASC);
 
-CREATE UNIQUE INDEX `getLong_UNIQUE` ON `hackermap`.`geo` (`geoLong` ASC) VISIBLE;
+CREATE UNIQUE INDEX `getLong_UNIQUE` ON `hackermap`.`geo` (`geoLong` ASC);
 
-CREATE UNIQUE INDEX `geoCity_UNIQUE` ON `hackermap`.`geo` (`geoCity` ASC) VISIBLE;
+CREATE UNIQUE INDEX `geoCity_UNIQUE` ON `hackermap`.`geo` (`geoCity` ASC);
 
 
 -- -----------------------------------------------------
@@ -75,11 +75,11 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`ip` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `ipAddr_UNIQUE` ON `hackermap`.`ip` (`ipAddr` ASC) VISIBLE;
+CREATE UNIQUE INDEX `ipAddr_UNIQUE` ON `hackermap`.`ip` (`ipAddr` ASC);
 
-CREATE UNIQUE INDEX `PK_ip_UNIQUE` ON `hackermap`.`ip` (`PK_ip` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_ip_UNIQUE` ON `hackermap`.`ip` (`PK_ip` ASC);
 
-CREATE INDEX `FK_geo_idx` ON `hackermap`.`ip` (`FK_geo` ASC) VISIBLE;
+CREATE INDEX `FK_geo_idx` ON `hackermap`.`ip` (`FK_geo` ASC);
 
 
 -- -----------------------------------------------------
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`site` (
   PRIMARY KEY (`PK_site`))
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `PK_site_UNIQUE` ON `hackermap`.`site` (`PK_site` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_site_UNIQUE` ON `hackermap`.`site` (`PK_site` ASC);
 
 
 -- -----------------------------------------------------
@@ -131,15 +131,15 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`visits` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `PK_date_UNIQUE` ON `hackermap`.`visits` (`PK_date` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_date_UNIQUE` ON `hackermap`.`visits` (`PK_date` ASC);
 
-CREATE INDEX `FK_site_idx` ON `hackermap`.`visits` (`FK_site` ASC) VISIBLE;
+CREATE INDEX `FK_site_idx` ON `hackermap`.`visits` (`FK_site` ASC);
 
-CREATE INDEX `FK_login_idx` ON `hackermap`.`visits` (`FK_login` ASC) VISIBLE;
+CREATE INDEX `FK_login_idx` ON `hackermap`.`visits` (`FK_login` ASC);
 
-CREATE INDEX `FK_ip_idx` ON `hackermap`.`visits` (`FK_ip` ASC) VISIBLE;
+CREATE INDEX `FK_ip_idx` ON `hackermap`.`visits` (`FK_ip` ASC);
 
-CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC) VISIBLE;
+CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC);
 
 
 -- -----------------------------------------------------
@@ -166,11 +166,11 @@ CREATE TABLE IF NOT EXISTS `hackermap`.`requests` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `PK_req_UNIQUE` ON `hackermap`.`requests` (`PK_req` ASC) VISIBLE;
+CREATE UNIQUE INDEX `PK_req_UNIQUE` ON `hackermap`.`requests` (`PK_req` ASC);
 
-CREATE INDEX `FK_ip_idx` ON `hackermap`.`requests` (`FK_ip` ASC) VISIBLE;
+CREATE INDEX `FK_ip_idx` ON `hackermap`.`requests` (`FK_ip` ASC);
 
-CREATE INDEX `FK_sites_idx` ON `hackermap`.`requests` (`FK_sites` ASC) VISIBLE;
+CREATE INDEX `FK_sites_idx` ON `hackermap`.`requests` (`FK_sites` ASC);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
