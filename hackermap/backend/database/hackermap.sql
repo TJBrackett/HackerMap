@@ -148,7 +148,7 @@ CREATE INDEX `FK_geo_idx` ON `hackermap`.`visits` (`FK_geo` ASC);
 DROP TABLE IF EXISTS `hackermap`.`requests` ;
 
 CREATE TABLE IF NOT EXISTS `hackermap`.`requests` (
-  `PK_req` INT NOT NULL,
+  `PK_req` INT NOT NULL AUTO_INCREMENT,
   `FK_sites` INT NOT NULL,
   `FK_ip` INT NOT NULL,
   `reqStatus` VARCHAR(10) NOT NULL,

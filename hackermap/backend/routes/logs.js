@@ -19,7 +19,6 @@ app.post('/logs', (req, res, next) => {
         reqStatus: req.body.reqStatus,
         reqUrl: req.body.reqUrl
     }
-    console.log(postInfo)
     //URL for ip geolocation lookup (Switching to Google Maps) 
     const geoApi = `http://api.ipstack.com/${postInfo.ipAddr}?access_key=${process.env.GEO_IP}&format=1`
   
@@ -42,12 +41,12 @@ app.post('/logs', (req, res, next) => {
             const pk_site = await querySite(postInfo.reqUrl)
             const pk_visits = await queryVisits(pk_geo, pk_ip, pk_site, reqDate, reqTime)
             const pk_req = await queryReq(pk_site, pk_ip, postInfo.reqStatus, postInfo.reqItem, postInfo.reqType)
+
+            const resJson = await {
+                postInfo: postInfo,
+                locationInfo: locationInfo
+            }
         }
     })
-
-    // const resJson = await {
-
-    // }
-
-    res.json()
+    res.json(postInfo)
 })
