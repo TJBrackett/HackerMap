@@ -1,15 +1,15 @@
-import react from 'react'
+import React from 'react';
 
 const Geo = ({ id, lat, long, city, region, country, flag }) => {
     return (
         <div>
-            <p>{id}</p>
-            <p>{lat}</p>
-            <p>{long}</p>
-            <p>{city}</p>
-            <p>{region}</p>
-            <p>{country}</p>
-            <p>{flag}</p>
+            <p>id = {id}</p>
+            <p>lat = {lat}</p>
+            <p>long = {long}</p>
+            <p>city = {city}</p>
+            <p>region = {region}</p>
+            <p>country = {country}</p>
+            <p>flag = {flag}</p>
         </div>
     )
 }
