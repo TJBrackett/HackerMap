@@ -16,9 +16,7 @@ function App() {
         setData(data)
       })
   }
-  // function apiFlag(flag) {
-
-  // }
+  
   return (
     <div className="test" id="map">
       {data.map((info) => (
