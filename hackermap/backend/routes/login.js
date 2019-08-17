@@ -2,7 +2,7 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const db = require('../database/dbCon.js')
 const jwt = require('jsonwebtoken')
-const queryLogin = require('../database/queryLogin.js')
+const queryLogin = require('../database/postLogin.js')
 const app = module.exports = express()
 
 

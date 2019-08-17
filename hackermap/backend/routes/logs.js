@@ -1,10 +1,11 @@
 const express = require('express')
 const request = require('request')
-const queryIp = require('../database/queryIp.js')
-const queryGeo = require('../database/queryGeo.js')
-const queryReq = require('../database/queryReq.js')
-const querySite = require('../database/querySite.js')
-const queryVisits = require('../database/queryVisits.js')
+const queryIp = require('../database/postIp.js')
+const queryGeo = require('../database/postGeo.js')
+const queryReq = require('../database/postReq.js')
+const querySite = require('../database/postSite.js')
+const queryVisits = require('../database/postVisits.js')
+const getAll = require('../database/getAll.js')
 
 const app = module.exports = express()
 
@@ -19,6 +20,7 @@ app.post('/logs', (req, res, next) => {
         reqStatus: req.body.reqStatus,
         reqUrl: req.body.reqUrl
     }
+    
     //URL for ip geolocation lookup (Switching to Google Maps) 
     const geoApi = `http://api.ipstack.com/${postInfo.ipAddr}?access_key=${process.env.GEO_IP}&format=1`
   
@@ -49,4 +51,9 @@ app.post('/logs', (req, res, next) => {
         }
     })
     res.json(postInfo)
+})
+
+app.get('/logs', async (req, res ,next) => {
+    const allData = await getAll()
+    res.send(allData)
 })
