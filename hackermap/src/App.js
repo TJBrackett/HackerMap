@@ -14,7 +14,7 @@ function App() {
   //     .then(({ data }) => {
   //       setData(data)
   //     })
-  // }
+  // })
 
   //Does something whenever a message is recieved
   eventSrc.onmessage = (e) => {
