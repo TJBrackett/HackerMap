@@ -13,7 +13,7 @@ function App() {
     //   axios.get('http://localhost:9520/logs')
     //     .then(({ data }) => {
     //       setData(data)
-    //     })
+    // })
   // })
 
   //Does something whenever a message is recieved
