@@ -7,14 +7,14 @@ function App() {
   //Establishes connection to backend
   const eventSrc = new EventSource("http://localhost:9520/logs")
   // useEffect(() => {
-  //   fetchData()
+    //   fetchData()
+    // })
+    // function fetchData() {
+    //   axios.get('http://localhost:9520/logs')
+    //     .then(({ data }) => {
+    //       setData(data)
+    //     })
   // })
-  // function fetchData() {
-  //   axios.get('http://localhost:9520/logs')
-  //     .then(({ data }) => {
-  //       setData(data)
-  //     })
-  // }
 
   //Does something whenever a message is recieved
   eventSrc.onmessage = (e) => {
