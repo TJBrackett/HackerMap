@@ -64,7 +64,8 @@ app.post('/logs', (req, res, next) => {
     })
 
     //Ends the connection and sends the message "LOGS POST"
-    res.end("LOGS POST")
+    app.set("test", JSON.stringify(postInfo))
+    res.end()
 })
 
 //Called when a get request is made to http://localhost:PORT/logs
@@ -79,9 +80,14 @@ app.get('/logs', async (req, res ,next) => {
         "content-Type": "text/event-stream" //Can be application/json
     })
 
-    //Sending `data: Test` to the frontend every 10 secs
-    setInterval(() => {
+    //Sending data to the frontend every 1 sec
+    setInterval(async () => {
+        let testData = await app.get("test")
+        if (testData !== undefined && testData !== "") {
+            console.log(testData)
+            res.send(`data: ${testData}\n\n`)
+        }
         //Sends the data as a json string, call json parse on frontend to turn it back into a json object
-        res.write(`data: ${JSON.stringify(allData)}\n\n`)
+        // res.write(`data: ${JSON.stringify(allData)}\n\n`) //Has to have json.stringify and has to have \n\n
     }, 1000)
 })
