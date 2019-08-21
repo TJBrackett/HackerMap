@@ -7,20 +7,21 @@ function App() {
   //Establishes connection to backend
   const eventSrc = new EventSource("http://localhost:9520/logs")
   // useEffect(() => {
-    //   fetchData()
-    // })
-    // function fetchData() {
-    //   axios.get('http://localhost:9520/logs')
-    //     .then(({ data }) => {
-    //       setData(data)
-    // })
-  // })
+  //     fetchData()
+  //   })
+  //   function fetchData() {
+  //     axios.get('http://localhost:9520/logs')
+  //       .then(({ data }) => {
+  //         setData(data)
+  //   })
+  // }
 
   //Does something whenever a message is recieved
   eventSrc.onmessage = (e) => {
     const data = JSON.parse(e.data) //Turns data from backend back into a json object
     const randEntry = Math.floor(Math.random() * data.length) //Gets a random number based on length of data array
-    console.log(data[randEntry].geoCity) //Console logs random city
+    // console.log(data[randEntry].geoCity) //Console logs random city
+    console.log(data)
   }
   return (
     <div className="test" id="map">
