@@ -84,7 +84,7 @@ app.get('/logs', async (req, res, next) => {
         if (sendData !== undefined && sendData !== "") {
             //Write keeps the connection open, where send or end would kill the connection to the front
             res.write(`data: ${sendData}\n\n`)
-            // app.set("sendData", "")
+            em.removeListener("sendData", app.set("sendData", ""))
         }
     })
 })
