@@ -18,29 +18,34 @@ function App() {
 
   //Does something whenever a message is recieved
   eventSrc.onmessage = (e) => {
-    const data = JSON.parse(e.data) //Turns data from backend back into a json object
+    const newData = JSON.parse(e.data) //Turns data from backend back into a json object
     const randEntry = Math.floor(Math.random() * data.length) //Gets a random number based on length of data array
-    // console.log(data[randEntry].geoCity) //Console logs random city
-    console.log(data)
+    setData([newData])
+    console.log(newData)
   }
   return (
-    <div className="test" id="map">
-      {data.map((info) => (
-        <Geo
-          key={info.PK_geo}
-          id={info.PK_geo}
-          lat={info.geoLat}
-          long={info.geoLong}
-          city={info.geoCity}
-          region={info.geoRegion}
-          country={info.geoCountry}
-          flag={info.geoFlag}
-        />
-      ))}
+    <div className="navBar">
+      <div className="card" id="map">
+        {data.map((info) => (
+          <Geo
+            key={1}
+            id={info.ipAddr}
+            lat={info.reqType}
+            long={info.reqItem}
+            city={info.reqStatus}
+            region={info.reqUrl}
+          // country={info.geoCountry}
+          // flag={info.geoFlag}
+          />
+        ))}
+        {/* <ipAddr
+
+        /> */}
+
+      </div>
     </div>
   );
 
 }
 
 export default App;
-

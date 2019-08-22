@@ -9,6 +9,12 @@ const getAll = require('../database/getAll.js')
 const events = require('events')
 const em = new events.EventEmitter()
 
+// em.once('newListener', (event) => {
+//     if (event === 'setData') {
+//         app.set("sendData", JSON.stringify(postInfo))
+//     }
+// })
+
 //Allows for the logs module (everything in this file) to be called in app.js
 
 const app = module.exports = express()
@@ -79,12 +85,19 @@ app.get('/logs', async (req, res, next) => {
         "content-Type": "text/event-stream" //Can be application/json
     })
     //Once the postData event it triggered, send data
-    em.on("postData", async () => {
-        const sendData = await app.get("sendData")
+    em.on("postData", () => {
+        const sendData = app.get("sendData")
         if (sendData !== undefined && sendData !== "") {
             //Write keeps the connection open, where send or end would kill the connection to the front
+            console.log(em.listenerCount("postData"))
+            console.log(em.listeners("postData"))
             res.write(`data: ${sendData}\n\n`)
-            em.removeListener("sendData", app.set("sendData", ""))
+            //Stop the listener to prevent memory leak
+
+            //Add an on connection close cleanup
+
+            // em.removeListener("postData", app.set("sendData", ""))
+            em.removeAllListeners()
         }
     })
 })
