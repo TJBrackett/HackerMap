@@ -8,12 +8,7 @@ const queryVisits = require('../database/postVisits.js')
 const getAll = require('../database/getAll.js')
 const events = require('events')
 const em = new events.EventEmitter()
-
-// em.once('newListener', (event) => {
-//     if (event === 'setData') {
-//         app.set("sendData", JSON.stringify(postInfo))
-//     }
-// })
+em.setMaxListeners(0)
 
 //Allows for the logs module (everything in this file) to be called in app.js
 
@@ -21,7 +16,7 @@ const app = module.exports = express()
 
 //Called when a post request is made to http://localhost:PORT/logs
 
-app.post('/logs', (req, res, next) => {
+app.post('/logs', async (req, res, next) => {
     const date = new Date()
     const reqDate = date.toLocaleDateString();
     const reqTime = date.toLocaleTimeString('en-us', { hour12: false });
@@ -72,7 +67,7 @@ app.post('/logs', (req, res, next) => {
     })
 
     //Emits an event trigger whenever data is received to the post route
-    em.emit("postData", app.set("sendData", JSON.stringify(postInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
+    await em.emit("postData", app.set("sendData", JSON.stringify(postInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
     res.end()
 })
 
@@ -85,19 +80,20 @@ app.get('/logs', async (req, res, next) => {
         "content-Type": "text/event-stream" //Can be application/json
     })
     //Once the postData event it triggered, send data
-    em.on("postData", () => {
-        const sendData = app.get("sendData")
-        if (sendData !== undefined && sendData !== "") {
-            //Write keeps the connection open, where send or end would kill the connection to the front
-            console.log(em.listenerCount("postData"))
-            console.log(em.listeners("postData"))
-            res.write(`data: ${sendData}\n\n`)
-            //Stop the listener to prevent memory leak
+    await em.once("postData", async () => {
+        let sendData = await app.get("sendData")
 
-            //Add an on connection close cleanup
+        if (sendData !== undefined && sendData !== "") {
+            // Write keeps the connection open, where send or end would kill the connection to the front
+            await res.send(`data: ${sendData}\n\n`)
+
+            // Stop the listener to prevent memory leak
+
+            // Add an on connection close cleanup
 
             // em.removeListener("postData", app.set("sendData", ""))
-            em.removeAllListeners()
+            sendData = ""
+            await em.removeAllListeners()
         }
     })
 })
