@@ -8,12 +8,7 @@ const queryVisits = require('../database/postVisits.js')
 const getAll = require('../database/getAll.js')
 const events = require('events')
 const em = new events.EventEmitter()
-
-// em.once('newListener', (event) => {
-//     if (event === 'setData') {
-//         app.set("sendData", JSON.stringify(postInfo))
-//     }
-// })
+em.setMaxListeners(0)
 
 //Allows for the logs module (everything in this file) to be called in app.js
 
@@ -21,7 +16,7 @@ const app = module.exports = express()
 
 //Called when a post request is made to http://localhost:PORT/logs
 
-app.post('/logs', (req, res, next) => {
+app.post('/logs', async (req, res, next) => {
     const date = new Date()
     const reqDate = date.toLocaleDateString();
     const reqTime = date.toLocaleTimeString('en-us', { hour12: false });
@@ -68,36 +63,38 @@ app.post('/logs', (req, res, next) => {
                 postInfo: postInfo,
                 locationInfo: locationInfo
             }
+            await em.emit("locationData", app.set("geoData", JSON.stringify(locationInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
         }
     })
 
     //Emits an event trigger whenever data is received to the post route
-    em.emit("postData", app.set("sendData", JSON.stringify(postInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
+    await em.emit("postData", app.set("sendData", JSON.stringify(postInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
     res.end()
 })
 
 //Called when a get request is made to http://localhost:PORT/logs
-app.get('/logs', async (req, res, next) => {
-    //On a status 200(everythings ok), sets header to keep connection alive, don't cache, and the content type to text/eventstream
-    res.status(200).set({
-        "connection": "keep-alive", //Required
-        "cache-control": "no-cache", //Not required, but is a really good idea
-        "content-Type": "text/event-stream" //Can be application/json
-    })
-    //Once the postData event it triggered, send data
-    em.on("postData", () => {
-        const sendData = app.get("sendData")
-        if (sendData !== undefined && sendData !== "") {
-            //Write keeps the connection open, where send or end would kill the connection to the front
-            console.log(em.listenerCount("postData"))
-            console.log(em.listeners("postData"))
-            res.write(`data: ${sendData}\n\n`)
-            //Stop the listener to prevent memory leak
+app.get('/logs', async (req, res) => {
+    if (req.headers.accept == 'text/event-stream') {
+        //On a status 200(everythings ok), sets header to keep connection alive, don't cache, and the content type to text/eventstream
+        res.status(200).set({
+            "connection": "keep-alive", //Required
+            "cache-control": "no-cache", //Not required, but is a really good idea
+            "content-Type": "text/event-stream" //Required
+        })
 
-            //Add an on connection close cleanup
+        //Once the postData event it triggered, send data
+        await em.on("postData", async () => {
+            let sendData = await app.get("sendData")
 
-            // em.removeListener("postData", app.set("sendData", ""))
-            em.removeAllListeners()
-        }
-    })
+            if (sendData !== undefined && sendData !== "") {
+                // Write keeps the connection open, where send or end would kill the connection to the front
+                await res.write(`id: ${Date.now()}\ndata: ${sendData}\n\n`)
+                // em.removeListener("postData", app.set("sendData", ""))
+                sendData = ""
+                em.removeAllListeners()
+            }
+        })
+    } else {
+        res.end("Your browser does not support event-streams.")
+    }
 })
