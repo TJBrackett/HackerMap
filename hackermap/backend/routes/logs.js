@@ -63,6 +63,7 @@ app.post('/logs', async (req, res, next) => {
                 postInfo: postInfo,
                 locationInfo: locationInfo
             }
+            await em.emit("locationData", app.set("geoData", JSON.stringify(locationInfo))) //Stringify data being sent due to it having to be sent over text/event-stream
         }
     })
 
@@ -72,28 +73,28 @@ app.post('/logs', async (req, res, next) => {
 })
 
 //Called when a get request is made to http://localhost:PORT/logs
-app.get('/logs', async (req, res, next) => {
-    //On a status 200(everythings ok), sets header to keep connection alive, don't cache, and the content type to text/eventstream
-    res.status(200).set({
-        "connection": "keep-alive", //Required
-        "cache-control": "no-cache", //Not required, but is a really good idea
-        "content-Type": "text/event-stream" //Can be application/json
-    })
-    //Once the postData event it triggered, send data
-    await em.once("postData", async () => {
-        let sendData = await app.get("sendData")
+app.get('/logs', async (req, res) => {
+    if (req.headers.accept == 'text/event-stream') {
+        //On a status 200(everythings ok), sets header to keep connection alive, don't cache, and the content type to text/eventstream
+        res.status(200).set({
+            "connection": "keep-alive", //Required
+            "cache-control": "no-cache", //Not required, but is a really good idea
+            "content-Type": "text/event-stream" //Required
+        })
 
-        if (sendData !== undefined && sendData !== "") {
-            // Write keeps the connection open, where send or end would kill the connection to the front
-            await res.send(`data: ${sendData}\n\n`)
+        //Once the postData event it triggered, send data
+        await em.on("postData", async () => {
+            let sendData = await app.get("sendData")
 
-            // Stop the listener to prevent memory leak
-
-            // Add an on connection close cleanup
-
-            // em.removeListener("postData", app.set("sendData", ""))
-            sendData = ""
-            await em.removeAllListeners()
-        }
-    })
+            if (sendData !== undefined && sendData !== "") {
+                // Write keeps the connection open, where send or end would kill the connection to the front
+                await res.write(`id: ${Date.now()}\ndata: ${sendData}\n\n`)
+                // em.removeListener("postData", app.set("sendData", ""))
+                sendData = ""
+                em.removeAllListeners()
+            }
+        })
+    } else {
+        res.end("Your browser does not support event-streams.")
+    }
 })

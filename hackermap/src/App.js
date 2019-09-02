@@ -6,6 +6,16 @@ function App() {
   const [data, setData] = useState([])
   //Establishes connection to backend
   const eventSrc = new EventSource("http://localhost:9520/logs")
+
+  eventSrc.onopen = () => console.log("opened")
+  eventSrc.onerror = () => console.log("error")
+  eventSrc.onmessage = (e) => {
+    const newData = JSON.parse(e.data) //Turns data from backend back into a json object
+
+    setData([newData])
+    console.log(newData)
+    console.log(data)
+  }
   useEffect(() => {
     //   fetchData()
     // })
@@ -15,20 +25,16 @@ function App() {
     //       setData(data)
     // })
   })
-  eventSrc.onopen = () => console.log("opened")
-  eventSrc.onmessage = (e) => {
-    const newData = JSON.parse(e.data) //Turns data from backend back into a json object
-
-    setData([newData])
-    console.log(newData)
-  }
+  // eventSrc.onopen = () => console.log("opened")
+  // eventSrc.onerror = () => console.log("error")
   //Does something whenever a message is recieved
   // eventSrc.onmessage = (e) => {
-  //   console.log(e)
   //   const newData = JSON.parse(e.data) //Turns data from backend back into a json object
+
   //   setData([newData])
   //   console.log(newData)
   // }
+
   return (
     <div className="navBar">
       <div className="card" id="map">
