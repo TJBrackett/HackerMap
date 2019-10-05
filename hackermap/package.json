@@ -7,6 +7,7 @@
     "bcrypt": "^3.0.6",
     "emoji-dictionary": "^1.0.10",
     "emoji-flags": "^1.2.0",
+    "express-sse": "^0.5.1",
     "gulp-cli": "^2.2.0",
     "gulp-uglifycss": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
@@ -16,7 +17,8 @@
     "promise": "^8.0.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "twilio": "^3.35.1"
   },
   "scripts": {
     "start": "react-scripts start",

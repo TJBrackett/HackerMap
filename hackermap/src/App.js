@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
+// import axios from 'axios'
 import Geo from './Geo.js'
 
 function App() {
   const [data, setData] = useState([])
   //Establishes connection to backend
-  const eventSrc = new EventSource("http://localhost:9520/logs")
+  const eventSrc = new EventSource("http://localhost:9520/")
 
   eventSrc.onopen = () => console.log("opened")
   eventSrc.onerror = () => console.log("error")
@@ -14,7 +14,7 @@ function App() {
 
     setData([newData])
     console.log(newData)
-    console.log(data)
+    console.log(e.data)
   }
   useEffect(() => {
     //   fetchData()
