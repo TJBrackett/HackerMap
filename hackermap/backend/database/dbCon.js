@@ -8,7 +8,7 @@ const dbCon = mysql.createPool({
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PW,
-    database: "hackermap"
+    database: process.env.DB_NAME
 })
 
 //Error handling
