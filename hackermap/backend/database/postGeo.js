@@ -15,6 +15,7 @@ module.exports = queryGeo = (lat, long, city, region, country, flag) => {
                         if (err) {
                             reject(err)
                         } else {
+                            // Return PK of entry
                             resolve(result.insertId)
                         }
                     })

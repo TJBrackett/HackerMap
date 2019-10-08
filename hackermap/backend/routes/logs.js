@@ -61,7 +61,7 @@ app.post('/logs', async (req, res, next) => {
                 flag: body.location.country_flag_emoji_unicode
             }
 
-            //Each of these consts calls a query from the db and sets the data to the variable, then the variables are used as foreign keys
+            //Each of these consts calls a query from the db and sets the primary key number to the variable, then the variables are used as foreign keys
             const pk_geo = await queryGeo(locationInfo.lat, locationInfo.long, locationInfo.city, locationInfo.region, locationInfo.country, locationInfo.flag)
             const pk_ip = await queryIp(pk_geo, postInfo.ipAddr)
             const pk_site = await querySite(postInfo.reqUrl)
