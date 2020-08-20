@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "emoji-dictionary": "^1.0.10",
     "emoji-flags": "^1.2.0",
     "express-sse": "^0.5.1",
